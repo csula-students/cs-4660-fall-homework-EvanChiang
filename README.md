@@ -47,3 +47,4 @@ Please check this Github repository often as the update will be posted.
 
 * [Syllabus](SYLLABUS.md)
 * Course chatroom -- https://csula-cs4660-fall-16.slack.com
+

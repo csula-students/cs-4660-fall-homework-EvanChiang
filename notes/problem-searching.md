@@ -158,13 +158,23 @@ we will cover later.
 #### Pseudocode
 
 ```javascript
-function DFS(v) {
-    // label v as discovered
-    for (node in Graph.neighbors(v)) {
-        if (!node.isDiscovered()) {
-            DFS(n);
-        }
+// accumlator, return, stacks
+
+DFS(startNode);
+
+function DFS(current) {
+  return DFS(current, {});
+}
+
+function DFS(current, parents) {
+  for (child in chilren) {
+    if (child.isDiscovered) {
+      continue;
     }
+    child.isDiscovered = true;
+    parents.put(current, child);
+    DFS(child, parents);
+  }
 }
 ```
 ### Recursion Review
@@ -187,8 +197,11 @@ function BFS(v) {
         node.parent = null;
     }
 
-    // create empty queue Q      
+    // create empty queue Q
     var queue = new Queue();
+    // Best first search - use priority queue (lowest number goes first)
+    var result = [];
+    var endTile = null;
 
     v.distance = 0;
     queue.enqueue(v);
@@ -202,10 +215,20 @@ function BFS(v) {
                 // note that I'm leaving edge value up to
                 // you to implement
                 node.parent = u;
+                if (Graph.isGoal(node)) {
+                  endTile = u;
+                }
                 queue.enqueue(node);
             }
         }
     }
+    // back trace from goal to start
+    while (endTile.parent != null) {
+      result.add(Edge(endTile.parent, endTile));
+      endTile = endTile.parent;
+    }
+    // remember to reverse the result before return
+    return result.reverse();
 }
 ```
 

@@ -18,32 +18,33 @@ public class BFS implements SearchStrategy {
     public List<Edge> search(Graph graph, Node source, Node dist) {
         ArrayList<Edge> returnList = new ArrayList<Edge>();
         LinkedList<Node> searchQueue = new LinkedList<Node>();
-        HashMap<Node, Node> parentMap = new HashMap<>();
+        HashMap<Node, Node> parentMap = new HashMap<>(); //key is child, value is parent
 
         searchQueue.add(source);
         while (!searchQueue.isEmpty())
         {
             Node currentNode = searchQueue.pop();
-            if (!parentMap.containsKey(currentNode))
+            for (Node n: graph.neighbors(currentNode))
             {
-                for (Node n: graph.neighbors(currentNode))
+                if (!parentMap.containsKey(n))
                 {
-                    parentMap.put(currentNode, n);
+                    parentMap.put(n, currentNode);
                     searchQueue.add(n);
                 }
-                if (currentNode.equals(dist))
-                {
-                    Node child = dist;
-                    Node parent = parentMap.get(child);
-                    while (!child.equals(source))
-                    {
-                        returnList.add(new Edge(parent, child, graph.distance(parent, child)));
-                        child = parent;
-                        parent = parentMap.get(child);
-                    }
-                    return returnList;
-                }
             }
+            if (currentNode.equals(dist))
+            {
+                Node child = dist;
+                Node parent = parentMap.get(child);
+                while (!child.equals(source))
+                {
+                    returnList.add(0, new Edge(parent, child, graph.distance(parent, child)));
+                    child = parent;
+                    parent = parentMap.get(child);
+                }
+                return returnList;
+            }
+
         }
 
         return returnList;

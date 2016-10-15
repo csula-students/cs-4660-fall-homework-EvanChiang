@@ -18,5 +18,4 @@ public class AstarSearch implements SearchStrategy {
     public List<Edge> search(Graph graph, Node source, Node dist) {
         return null;
     }
-
 }

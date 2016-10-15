@@ -13,8 +13,8 @@ public class DijkstraSearch implements SearchStrategy {
     @Override
     public List<Edge> search(Graph graph, Node source, Node dist)
     {
-        ArrayList<Edge> returnList = new ArrayList<Edge>();
-        LinkedList<Node> searchQueue = new LinkedList<Node>();
+        ArrayList<Edge> returnList = new ArrayList<>();
+        LinkedList<Node> searchQueue = new LinkedList<>();
         HashMap<Node, Node> parentMap = new HashMap<>(); //key is child, value is parent
         HashMap<Node, Integer> distanceMap = new HashMap<>(); //the key's distance away from source
         searchQueue.add(source);

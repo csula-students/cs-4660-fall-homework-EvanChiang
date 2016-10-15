@@ -19,7 +19,6 @@ import java.util.*;
 public class AdjacencyList implements Representation {
     private Map<Node, Collection<Edge>> adjacencyList;
 
-<<<<<<< HEAD
     public AdjacencyList(File file)
     {
         try {
@@ -44,9 +43,6 @@ public class AdjacencyList implements Representation {
             }
             br.close();
         }catch(IOException e){}
-=======
-    protected AdjacencyList(File file) {
->>>>>>> a74ddd5b85fc275bc2bf025f17a85da3cfca74a4
     }
 
     protected AdjacencyList() {

@@ -19,6 +19,7 @@ import java.util.HashMap;
 public class Parser {
     public static Graph readRectangularGridFile(Representation.STRATEGY graphRepresentation, File file) {
         Graph graph = new Graph(Representation.of(graphRepresentation));
+        /*
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line = br.readLine();
@@ -37,6 +38,7 @@ public class Parser {
             br.close();
         } catch (IOException e) {
         }
+         */
         return graph;
     }
 

@@ -15,8 +15,8 @@ import java.util.*;
  * TODO: please fill the method body of this class
  */
 public class AdjacencyMatrix implements Representation {
-    private Node[] nodes;
-    private int[][] adjacencyMatrix;
+    private Node[] nodes = new Node[0];
+    private int[][] adjacencyMatrix = new int[0][0];
 
     public AdjacencyMatrix(File file)
     {
@@ -81,7 +81,7 @@ public class AdjacencyMatrix implements Representation {
 
     @Override
     public List<Node> neighbors(Node x) {
-        ArrayList<Node> neighbors = new ArrayList<Node>();
+        ArrayList<Node> neighbors = new ArrayList<>();
         int row = -1;
         for (int i = 0; i < nodes.length; i++)
         {
@@ -102,28 +102,38 @@ public class AdjacencyMatrix implements Representation {
     @Override
     public boolean addNode(Node x)
     {
-        Node[] temp = new Node[nodes.length + 1];
-        for (int i = 0; i < nodes.length; i ++)
+        if (nodes.length == 0)
         {
-            if (nodes[i].equals(x))
-                return false;
-            temp[i] = nodes[i];
+            nodes = new Node[1];
+            nodes[0] = x;
+            adjacencyMatrix = new int[1][1];
+            adjacencyMatrix[0][0] = 0;
         }
-        temp[nodes.length] = x;
-        nodes = temp;
-
-        int[][] tempMatrix = new int[adjacencyMatrix.length+1][adjacencyMatrix.length+1];
-        for (int i = 0; i < adjacencyMatrix.length; i++)
+        else
         {
-            for (int j = 0; j < adjacencyMatrix.length; j++)
-                tempMatrix[i][j] = adjacencyMatrix[i][j]; //copy matrix
-        }
-        for (int i = 0; i < adjacencyMatrix.length + 1; i++)
-            tempMatrix[adjacencyMatrix.length][i] = 0; //set new column to 0;
-        for (int i = 0; i < adjacencyMatrix.length + 1; i++)
-            tempMatrix[i][adjacencyMatrix.length] = 0; //set new row to 0;
+            Node[] temp = new Node[nodes.length + 1];
+            for (int i = 0; i < nodes.length; i ++)
+            {
+                if (nodes[i].equals(x))
+                    return false;
+                temp[i] = nodes[i];
+            }
+            temp[nodes.length] = x;
+            nodes = temp;
 
-        adjacencyMatrix = tempMatrix;
+            int[][] tempMatrix = new int[adjacencyMatrix.length+1][adjacencyMatrix.length+1];
+            for (int i = 0; i < adjacencyMatrix.length; i++)
+            {
+                for (int j = 0; j < adjacencyMatrix.length; j++)
+                    tempMatrix[i][j] = adjacencyMatrix[i][j]; //copy matrix
+            }
+            for (int i = 0; i < adjacencyMatrix.length + 1; i++)
+                tempMatrix[adjacencyMatrix.length][i] = 0; //set new column to 0;
+            for (int i = 0; i < adjacencyMatrix.length + 1; i++)
+                tempMatrix[i][adjacencyMatrix.length] = 0; //set new row to 0;
+
+            adjacencyMatrix = tempMatrix;
+        }
 
         return true;
     }

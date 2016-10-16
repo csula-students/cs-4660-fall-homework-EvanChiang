@@ -26,37 +26,41 @@ public class Parser {
             String start = br.readLine();
             String line = br.readLine();
             int lineLength = line.length()/2 - 1;
-            while (line != start) {
+            int y = 0;
+            int x = 0;
+            while (!line.equals(start)) {
                 String[] data = splitTiles(line, lineLength);
-                int row = 0;
-                int col = 0;
                 for (String s: data)
                 {
-                    Tile tile = new Tile(row, col, s);
+                    Tile tile = new Tile(x, y, s);
                     Node n = new Node (tile);
                     nodeList.add(n);
-                    graph.addNode(n);
-                    col++;
-                    if (col >= lineLength)
+                    //graph.addNode(n);
+                    x++;
+                    if (x >= lineLength)
                     {
-                        col = 0;
-                        row++;
+                        x = 0;
+                        y++;
                     }
                 }
                 line = br.readLine();
             }
+            int count = 0;
             for (int i = 0; i < nodeList.size(); i++)
             {
+                System.out.println(count);
+                count++;
                 int column = i % lineLength;
                 int row = i / lineLength;
                 if (row - 1 > 0)
-                    graph.addEdge(new Edge(nodeList.get(i), nodeList.get(i - 1), 1));
-                if (row + 1 < lineLength)
-                    graph.addEdge(new Edge(nodeList.get(i), nodeList.get(i + 1), 1));
-                if (column - 1 > 0)
                     graph.addEdge(new Edge(nodeList.get(i), nodeList.get(i - lineLength), 1));
-                if (column + 1 < nodeList.size() / lineLength)
+                if (row + 1 < nodeList.size() / lineLength)
                     graph.addEdge(new Edge(nodeList.get(i), nodeList.get(i + lineLength), 1));
+                if (column - 1 > 0)
+                    graph.addEdge(new Edge(nodeList.get(i), nodeList.get(i - 1), 1));
+                if (column + 1 < lineLength)
+                    graph.addEdge(new Edge(nodeList.get(i), nodeList.get(i + 1), 1));
+                graph.addNode(nodeList.get(i));
             }
             br.close();
         } catch (IOException e) {

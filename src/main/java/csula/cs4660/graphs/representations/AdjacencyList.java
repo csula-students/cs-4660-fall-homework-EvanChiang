@@ -17,7 +17,7 @@ import java.util.*;
  * TODO: please implement the method body
  */
 public class AdjacencyList implements Representation {
-    private Map<Node, Collection<Edge>> adjacencyList;
+    private Map<Node, Collection<Edge>> adjacencyList = new HashMap<Node, Collection<Edge>>();
 
     public AdjacencyList(File file) {
         try {

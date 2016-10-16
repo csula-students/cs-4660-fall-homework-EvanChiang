@@ -1,5 +1,6 @@
 package csula.cs4660.graphs.representations;
 
+import csula.cs4660.games.models.Tile;
 import csula.cs4660.graphs.Edge;
 import csula.cs4660.graphs.Node;
 
@@ -192,7 +193,7 @@ public class AdjacencyMatrix implements Representation {
     {
         int indexFrom = -1;
         int indexTo = -1;
-        for (int i = 0; i < nodes.length; i ++)
+        for (int i = 0; i < nodes.length; i++)
         {
             if (nodes[i].equals(x.getFrom()))
                 indexFrom = i;

@@ -4,6 +4,7 @@ import csula.cs4660.games.models.Tile;
 import csula.cs4660.graphs.Edge;
 import csula.cs4660.graphs.Graph;
 import csula.cs4660.graphs.Node;
+import csula.cs4660.graphs.representations.AdjacencyMatrix;
 import csula.cs4660.graphs.representations.Representation;
 
 import java.io.BufferedReader;
@@ -35,7 +36,7 @@ public class Parser {
                     Tile tile = new Tile(x, y, s);
                     Node n = new Node (tile);
                     nodeList.add(n);
-                    //graph.addNode(n);
+                    graph.addNode(n);
                     x++;
                     if (x >= lineLength)
                     {
@@ -45,11 +46,8 @@ public class Parser {
                 }
                 line = br.readLine();
             }
-            int count = 0;
             for (int i = 0; i < nodeList.size(); i++)
             {
-                System.out.println(count);
-                count++;
                 int column = i % lineLength;
                 int row = i / lineLength;
                 if (row - 1 > 0)
@@ -60,7 +58,7 @@ public class Parser {
                     graph.addEdge(new Edge(nodeList.get(i), nodeList.get(i - 1), 1));
                 if (column + 1 < lineLength)
                     graph.addEdge(new Edge(nodeList.get(i), nodeList.get(i + 1), 1));
-                graph.addNode(nodeList.get(i));
+
             }
             br.close();
         } catch (IOException e) {
@@ -86,19 +84,19 @@ public class Parser {
         for (Edge e: edges)
         {
             Tile fromTile = (Tile)e.getFrom().getData();
-            Tile toTile = (Tile)e.getFrom().getData();
+            Tile toTile = (Tile)e.getTo().getData();
             int x = fromTile.getX() - toTile.getX();
             int y = fromTile.getY() - toTile.getY();
-            if (x == -1)
-                actions += "W";
-            else if (x == 1)
-                actions += "E";
+            if (x == 1)
+                actions = actions + "W";
+            else if (x == -1)
+                actions = actions + "E";
             else if (y == -1)
-                actions += "S";
+                actions = actions + "S";
             else if (y == 1)
-                actions += "N";
+                actions = actions + "N";
         }
-
+        System.out.println("actions: " + actions);
         return actions;
     }
 }

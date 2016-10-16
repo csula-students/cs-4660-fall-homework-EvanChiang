@@ -4,7 +4,9 @@ import csula.cs4660.games.models.Tile;
 import csula.cs4660.graphs.Edge;
 import csula.cs4660.graphs.Graph;
 import csula.cs4660.graphs.Node;
+import csula.cs4660.graphs.utils.Parser;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -23,77 +25,87 @@ public class AstarSearch implements SearchStrategy {
         HashMap<Node, Double> distanceMap = new HashMap<>(); //the key's distance away from source
         searchQueue.add(source); // index 0 is the last priority, index searchQueue.size() - 1 is first priority
         distanceMap.put(source, 0.0);
+
         while (!searchQueue.isEmpty())
         {
-            Node currentNode = searchQueue.remove(searchQueue.size()-1);
-            Tile t = (Tile)currentNode.getData();
-            System.out.println(t.getX() + ", " + t.getY());
-            for (Node n: graph.neighbors(currentNode))
+            Node currentNode = searchQueue.remove(searchQueue.size() - 1);
+            System.out.println("test");
+            for (Node neighbor: graph.neighbors(currentNode))
             {
-                Tile tilen = (Tile)n.getData();
-                System.out.println("neighbor: " + tilen.getX() + ", " + tilen.getY());
+                System.out.println("test2");
+                double distance = graph.distance(currentNode, neighbor) + distanceMap.get(currentNode);
 
-                double distance = graph.distance(currentNode, n) + distanceMap.get(currentNode);
-                if (n.equals(dist))
+                if (neighbor.equals(dist))
                 {
-                    parentMap.put(n, currentNode);
-                    distanceMap.put(n, distance);
-                    searchQueue.clear();
-                    break;
-                }
-                else if (parentMap.containsKey(n))
-                {
-                    if (distanceMap.get(n) > distance)
+                    Node child = dist;
+                    Node parent = parentMap.get(child);
+                    while (!child.equals(source))
                     {
-                        parentMap.put(n, currentNode);
-                        distanceMap.put(n, distance);
+                        returnList.add(0, new Edge(parent, child, graph.distance(parent, child)));
+                        child = parent;
+                        parent = parentMap.get(child);
                     }
+                    return returnList;
+                }
+                else if (parentMap.containsKey(neighbor))
+                {
+                   if (distanceMap.get(neighbor) > distance)
+                   {
+                       parentMap.put(neighbor, currentNode);
+                       distanceMap.put(neighbor, distance);
+                   }
                 }
                 else
                 {
-                    parentMap.put(n, currentNode);
-                    distanceMap.put(n, distance);
+                    parentMap.put(neighbor, currentNode);
+                    distanceMap.put(neighbor, distance);
                     if (searchQueue.isEmpty())
-                        searchQueue.add(0, n);
+                        searchQueue.add(neighbor);
                     else
                     {
+                        double heuristicNeighbor = heuristic(neighbor, dist) + distanceMap.get(neighbor);
                         for (int i = searchQueue.size() - 1; i >= 0; i--)
                         {
-                            if (heuristic(graph, searchQueue.get(i), dist) > heuristic(graph, n, dist))
+                            double heuristicNodeInQueue = heuristic(searchQueue.get(i), dist)
+                                                                    + distanceMap.get(searchQueue.get(i));
+                            if (heuristicNeighbor < heuristicNodeInQueue)
                             {
-                                searchQueue.add(i + 1, n);
-                                break;
+                                searchQueue.add(i+1, neighbor);
+                                i = -1;
+                            }
+                            else if (heuristicNeighbor == heuristicNodeInQueue)
+                            {
+                                Tile tileNeighbor = (Tile)neighbor.getData();
+                                Tile tileQueue = (Tile)searchQueue.get(i).getData();
+                                double deltaX = tileNeighbor.getX() - tileQueue.getX();
+                                double deltaY = tileNeighbor.getY() - tileQueue.getY();
+                                if (deltaY > 0)
+                                    searchQueue.add(i+1, neighbor);
+                                else if (deltaY < 0)
+                                    searchQueue.add(i, neighbor);
+                                else if (deltaX > 0)
+                                    searchQueue.add(i + 1, neighbor);
+                                else
+                                    searchQueue.add(i, neighbor);
                             }
                             else if (i == 0)
-                            {
-                                searchQueue.add(0, n);
-                            }
+                                searchQueue.add(0, neighbor);
                         }
                     }
                 }
             }
         }
-        Node child = dist;
-        Node parent = parentMap.get(child);
-        while (!child.equals(source))
-        {
-            System.out.println(((Tile)child.getData()).getType());
-            System.out.println(((Tile)parent.getData()).getType());
-            returnList.add(0, new Edge(parent, child, graph.distance(parent, child)));
-            child = parent;
-            System.out.println(((Tile)child.getData()).getType());
-            parent = parentMap.get(child);
-        }
         return returnList;
     }
 
-    private double heuristic(Graph graph, Node start, Node dest)
+    private double heuristic(Node start, Node dest)
     {
         Tile startTile = (Tile)start.getData();
         Tile destTile = (Tile)dest.getData();
         double scale = 1;
-        double distance = Math.sqrt(Math.pow(startTile.getX() - destTile.getX(), 2) +
-                                    Math.pow(startTile.getY() - destTile.getY(), 2));
+        double deltaX = Math.abs(startTile.getX() - destTile.getX());
+        double deltaY = Math.abs(startTile.getY() - destTile.getY());
+        double distance = Math.sqrt((deltaX * deltaX) + (deltaY * deltaY));
         return distance * scale;
     }
 }

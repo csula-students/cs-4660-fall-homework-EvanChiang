@@ -21,77 +21,92 @@ public class App {
         State destState = Client.getState("e577aa79473673f6158cc73e0e5dc122").get();
         // to get an edge between state to its neighbor, you can call stateTransition
         LinkedList<String> queue = new LinkedList<>();
+        HashSet<String> visited = new HashSet<>();
         HashMap<String, String> parentMapBFS = new HashMap<>();
         HashMap<String, String> parentMapD = new HashMap<>();
-        HashMap<String, Integer> distanceMap = new HashMap<>();
-
+        HashMap<String, Integer> distanceMapD = new HashMap<>();
+        HashMap<String, Integer> distanceMapBFS = new HashMap<>();
+        ArrayList<String> pathBFS = new ArrayList<>();
+        ArrayList<String> pathD = new ArrayList<>();
+        boolean found = false;
         queue.add(initialState.getId());
-
+        distanceMapD.put(initialState.getId(), 0);
+        distanceMapBFS.put(initialState.getId(), 0);
         while (!queue.isEmpty())
         {
-            String currentId = queue.poll();
+            String currentId = queue.pop();
 
-            for (State neighbor: Client.getState(currentId).get().getNeighbors())
+            for (State neighbor: (Client.getState(currentId).get()).getNeighbors())
             {
                 String neighborId = neighbor.getId();
-                int distance = (Client.stateTransition(currentId, neighborId)).get().getEvent().getEffect();
-                if (neighborId == destState.getId())
+                int event = Client.stateTransition(currentId, neighborId).get().getEvent().getEffect();
+//                System.out.println(neighborId + " " + event);
+                int distance = event + distanceMapD.get(currentId);
+                if (neighborId.equals(destState.getId()) && !found)
                 {
-                    System.out.println("found the exit!");
-                }
-                if (distanceMap.containsKey(neighborId))
-                {
-                    if (distanceMap.get(neighborId) > (distanceMap.get(currentId) + distance))
-                    {
-                        parentMapD.put(neighborId, currentId);
-                        distanceMap.put(neighborId, distanceMap.get(currentId) + distance);
-                    }
-                }
-                else
-                {
+                    found = true;
+                    System.out.println("BFS found exit");
                     parentMapBFS.put(neighborId, currentId);
-                    parentMapD.put(neighborId, currentId);
-                    distanceMap.put(neighborId, distance);
-                    queue.add(neighborId);
+                    distanceMapBFS.put(neighborId, distance);
+                    String child = destState.getId();
+                    String parent = parentMapBFS.get(child);
+                    while (!child.equals(initialState.getId()))
+                    {
+                        State childState = Client.getState(child).get();
+                        State parentState = Client.getState(parent).get();
+                        pathBFS.add(0, parentState.getLocation().getName() + ":"
+                                + childState.getLocation().getName() + ":"
+                                + distanceMapBFS.get(child));
+                        child = parent;
+                        parent = parentMapBFS.get(child);
+                    }
+                    writeTextFile(pathBFS, "BFS.txt");
+                    System.out.println("BFS.txt written");
                 }
-            }
-        }
-        /*
-        HashSet<String> visited = new HashSet<>();
-        LinkedList<String> graphBuilder = new LinkedList<>();
-        Graph graph = new Graph(Representation.of(Representation.STRATEGY.ADJACENCY_LIST));
-        graphBuilder.add(initialState.getId());
-        graph.addNode(new Node(initialState));
-        int count = 0;
-        while (!graphBuilder.isEmpty())
-        {
-            String currentId = graphBuilder.pop();
-            State currentState = Client.getState(currentId).get();
-            if (!visited.contains(currentId))
-            {
-                for (State state: (currentState.getNeighbors()))
+                if (!currentId.equals(destState.getId()) && !visited.contains(neighborId))
                 {
-                    State neighborState = Client.getState(state.getId()).get();
-                    Node node = new Node(neighborState);
-                    graphBuilder.add(neighborState.getId());
-                    graph.addNode(node);
-                    Edge edge = new Edge(new Node(currentState), node, (Client.stateTransition
-                            (currentState.getId(), neighborState.getId()).get().getEvent().getEffect()));
-                    graph.addEdge(edge);
+                    if (parentMapD.containsKey(neighborId))
+                    {
+                        if (distanceMapD.get(neighborId) < distance)
+                        {
+//                            System.out.println(neighborId);
+                            parentMapD.remove(neighborId);
+                            distanceMapD.remove(neighborId);
+                            parentMapD.put(neighborId, currentId);
+                            distanceMapD.put(neighborId, distance);
+                            queue.add(neighborId);
+                        }
+                    }
+                    else
+                    {
+                        parentMapBFS.put(neighborId, currentId);
+                        parentMapD.put(neighborId, currentId);
+                        distanceMapD.put(neighborId, distance);
+                        distanceMapBFS.put(neighborId, distance);
+                        queue.add(neighborId);
+                    }
                 }
             }
             visited.add(currentId);
         }
-        System.out.println("graph built");
-        Node initialNode = new Node(initialState);
-        Node initialDest = new Node(destState);
-//        String[] BFSanswer = BFS(graph, initialNode, initialDest);
-//        String[] DijkstraAnswer = Dijkstra(graph, initialNode, initialDest);
-//        writeTextFile(BFSanswer, "BFS.txt");
-        */
+        System.out.println("Search complete");
+        String child = destState.getId();
+        String parent = parentMapD.get(child);
+        while (!child.equals(initialState.getId()))
+        {
+            System.out.println(child);
+            State childState = Client.getState(child).get();
+            State parentState = Client.getState(parent).get();
+            pathD.add(0, parentState.getLocation().getName() + ":"
+                    + childState.getLocation().getName() + ":"
+                    + distanceMapD.get(child));
+            child = parent;
+            parent = parentMapD.get(child);
+        }
+        writeTextFile(pathD, "Dijkstra.txt");
     }
 
-    private static void writeTextFile(String[] path, String outputName)
+    private static void writeTextFile(ArrayList<String> path, String outputName)
             throws FileNotFoundException, UnsupportedEncodingException
     {
         PrintWriter writer = new PrintWriter(outputName, "UTF-8");
@@ -122,7 +137,7 @@ public class App {
             {
                 String neighborId = ((State)neighborNode.getData()).getId();
                 State neighborState = Client.getState(neighborId).get();
-                if (neighborId == destinationId)
+                if (neighborId.equals(destinationId))
                 {
                     System.out.println("destination found!");
                     parentMap.put(neighborNode, currentNode);

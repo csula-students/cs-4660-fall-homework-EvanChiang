@@ -1,1 +1,6 @@
 BFS Path: 
+Empty Room:Dark Room:-30
+Dark Room:Dark Room:-10
+Dark Room:Dire Tombs:-30
+Dire Tombs:Chamber:-60
+Chamber:Dark Room:-10

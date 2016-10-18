@@ -16,8 +16,8 @@ import java.util.*;
  * TODO: Please fill the body of methods in this class
  */
 public class ObjectOriented implements Representation {
-    private Collection<Node> nodes = new ArrayList<Node>();
-    private Collection<Edge> edges = new ArrayList<Edge>();
+    private Collection<Node> nodes;
+    private Collection<Edge> edges;
 
     public ObjectOriented(File file) {
         try {
@@ -44,7 +44,8 @@ public class ObjectOriented implements Representation {
     }
 
     public ObjectOriented() {
-
+        nodes = new ArrayList<>();
+        edges = new ArrayList<>();
     }
 
     @Override

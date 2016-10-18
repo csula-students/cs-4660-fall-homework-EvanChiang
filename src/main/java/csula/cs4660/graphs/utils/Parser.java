@@ -50,13 +50,13 @@ public class Parser {
             {
                 int column = i % lineLength;
                 int row = i / lineLength;
-                if (row - 1 > 0)
+                if (row - 1 >= 0)
                     graph.addEdge(new Edge(nodeList.get(i), nodeList.get(i - lineLength), 1));
-                if (row + 1 < nodeList.size() / lineLength)
+                if (row + 1 <= (nodeList.size() / lineLength) - 1)
                     graph.addEdge(new Edge(nodeList.get(i), nodeList.get(i + lineLength), 1));
-                if (column - 1 > 0)
+                if (column - 1 >= 0)
                     graph.addEdge(new Edge(nodeList.get(i), nodeList.get(i - 1), 1));
-                if (column + 1 < lineLength)
+                if (column + 1 <= lineLength - 1)
                     graph.addEdge(new Edge(nodeList.get(i), nodeList.get(i + 1), 1));
 
             }
@@ -96,7 +96,7 @@ public class Parser {
             else if (y == 1)
                 actions = actions + "N";
         }
-        System.out.println("actions: " + actions);
+//        System.out.println("actions: " + actions);
         return actions;
     }
 }

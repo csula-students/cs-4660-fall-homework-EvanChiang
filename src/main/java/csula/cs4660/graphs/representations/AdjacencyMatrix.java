@@ -16,8 +16,8 @@ import java.util.*;
  * TODO: please fill the method body of this class
  */
 public class AdjacencyMatrix implements Representation {
-    private Node[] nodes = new Node[0];
-    private int[][] adjacencyMatrix = new int[0][0];
+    private Node[] nodes;
+    private int[][] adjacencyMatrix;
 
     public AdjacencyMatrix(File file)
     {
@@ -58,7 +58,8 @@ public class AdjacencyMatrix implements Representation {
     }
 
     public AdjacencyMatrix() {
-
+        nodes = new Node[0];
+        adjacencyMatrix = new int[0][0];
     }
 
     @Override

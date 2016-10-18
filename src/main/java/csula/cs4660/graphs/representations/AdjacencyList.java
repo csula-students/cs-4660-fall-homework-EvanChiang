@@ -42,7 +42,8 @@ public class AdjacencyList implements Representation {
             }
             br.close();
         }catch(IOException e){}
-    }
+
+        }
 
     protected AdjacencyList() {
         adjacencyList = new HashMap<>();

@@ -4,7 +4,6 @@ import csula.cs4660.games.models.Tile;
 import csula.cs4660.graphs.Edge;
 import csula.cs4660.graphs.Graph;
 import csula.cs4660.graphs.Node;
-import csula.cs4660.graphs.representations.AdjacencyMatrix;
 import csula.cs4660.graphs.representations.Representation;
 
 import java.io.BufferedReader;
@@ -63,6 +62,7 @@ public class Parser {
             br.close();
         } catch (IOException e) {
         }
+
         return graph;
     }
 

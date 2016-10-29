@@ -1,0 +1,7 @@
+BFS Path: 
+Empty Room:Chamber:0
+Chamber:Empty Room:0
+Empty Room:Room with cage:20
+Room with cage:Dire Tombs:20
+Dire Tombs:Chamber:-10
+Chamber:Dark Room:-10

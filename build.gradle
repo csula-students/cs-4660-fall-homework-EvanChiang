@@ -34,17 +34,9 @@ task wgcfGame(type: JavaExec) {
     main = 'csula.cs4660.games.WGCFGame'
 }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 959fbb379b17aba053f911cd4a7ae7ce8efe757c
 task quiz(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
 
     main = 'csula.cs4660.quizes.App'
-<<<<<<< HEAD
 }
-=======
-}
-
->>>>>>> 959fbb379b17aba053f911cd4a7ae7ce8efe757c

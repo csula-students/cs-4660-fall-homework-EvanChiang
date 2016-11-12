@@ -5,16 +5,13 @@ import csula.cs4660.graphs.Node;
 
 import java.io.BufferedReader;
 import java.io.File;
-<<<<<<< HEAD
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-=======
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
->>>>>>> 959fbb379b17aba053f911cd4a7ae7ce8efe757c
 
 /**
  * Object oriented representation of graph is using OOP approach to store nodes

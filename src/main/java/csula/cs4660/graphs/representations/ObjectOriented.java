@@ -1,5 +1,6 @@
 package csula.cs4660.graphs.representations;
 
+import csula.cs4660.games.models.MiniMaxState;
 import csula.cs4660.graphs.Edge;
 import csula.cs4660.graphs.Node;
 
